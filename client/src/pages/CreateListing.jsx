@@ -31,8 +31,8 @@ export default function CreateListing() {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
-  console.log(formData);
-  const handleImageSubmit = (e) => {
+
+  const handleImageSubmit = () => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
       setUploading(true);
       setImageUploadError(false);
@@ -50,7 +50,7 @@ export default function CreateListing() {
           setImageUploadError(false);
           setUploading(false);
         })
-        .catch((err) => {
+        .catch(() => {
           setImageUploadError('Image upload failed (2 mb max per image)');
           setUploading(false);
         });
@@ -154,7 +154,7 @@ export default function CreateListing() {
     }
   };
   return (
-    <main className='p-3 max-w-4xl mx-auto'>
+    <main className='p-3 max-w-4xl mx-auto font-inter'>
       <h1 className='text-3xl font-semibold text-center my-7'>
         Create a Listing
       </h1>

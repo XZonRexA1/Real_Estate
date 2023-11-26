@@ -1,17 +1,21 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import userRouter from './routes/user.route.js';
-import authRouter from './routes/auth.route.js';
+import express from "express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import userRouter from './routes/user.route.js'
+import authRouter from './routes/auth.route.js'
+import cookieParser from "cookie-parser";
 import listingRouter from './routes/listing.route.js';
-import cookieParser from 'cookie-parser';
-import path from 'path';
+
+import path from "path"
+
 dotenv.config();
 
 mongoose
-  .connect(process.env.MONGO)
+  .connect(
+    `mongodb+srv://${process.env.REAL_ESTATE_USER}:${process.env.REAL_ESTATE_PASSWORD}@cluster0.1fwa7gk.mongodb.net/?retryWrites=true&w=majority`
+  )
   .then(() => {
-    console.log('Connected to MongoDB!');
+    console.log("Connected to MongoDB!");
   })
   .catch((err) => {
     console.log(err);
@@ -22,22 +26,21 @@ mongoose
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser())
 
-app.use(cookieParser());
-
-app.listen(3000, () => {
-  console.log('Server is running on port 3000!');
+app.listen(5000, () => {
+  console.log("Server is running on port 5000!!!");
 });
 
-app.use('/api/user', userRouter);
-app.use('/api/auth', authRouter);
-app.use('/api/listing', listingRouter);
 
+app.use("/api/user", userRouter)
+app.use("/api/auth", authRouter)
+app.use("/api/listing", listingRouter);
 
 app.use(express.static(path.join(__dirname, '/client/dist')));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+  res.sendFile(path.join(__dirname, 'client/dist/index.html'));
 })
 
 app.use((err, req, res, next) => {
@@ -47,5 +50,5 @@ app.use((err, req, res, next) => {
     success: false,
     statusCode,
     message,
-  });
-});
+  })
+})
